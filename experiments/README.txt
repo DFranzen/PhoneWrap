@@ -1,1 +1,1 @@
-All example packages and their policies
+All policies for the example packages. The packages can be provided on request
