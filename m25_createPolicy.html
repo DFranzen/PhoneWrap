@@ -1,0 +1,98 @@
+<body>
+  <script type="text/javascript">
+    //Save policy to file
+    //Parse policy from file (read in a JSON, read first comment as description)
+    function deleteThisLi(event) {
+    var li = event.target.parentNode;
+    var ul = li.parentNode;
+    ul.removeChild(li);
+    }
+    function add_buttonCrit(event) {
+      var li_button = event.target.parentNode;
+      var ul = li_button.parentNode;
+      var li = document.createElement("li");
+      li.innerHTML = '<button onclick="deleteThisLi(event)">-</button>';
+    li.innerHTML += '<input type="text" name="bcond" value="id" />';
+    li.innerHTML += ":";
+      li.innerHTML += '<input type="text" name"bcondvalue" value="Send" />';
+    
+      ul.insertBefore(li,li_button);
+    }
+    function add_buttonPol(event) {
+    var li_button = event.target.parentNode;
+    var ul = li_button.parentNode;
+    var li = document.createElement("li");
+    li.innerHTML = '<button onclick="deleteThisLi(event)">-</button>';
+    li.innerHTML += 'only <input type="number" id="mperms" value=1 />';
+    li.innerHTML += 'time(s) for each click on a button for which the attributes ';
+    li.innerHTML += '<select id="match"><option value="exact">are exactly</option><option value="begins">begin with</option><option value="ends">end with</option><option value="contains">contain</option><option value="regex">match the regular expression</option></select>';
+
+    li.innerHTML += '<ul><li><button id="b_addCrit" onclick="add_buttonCrit(event)">+</button></li></ul>';
+    ul.insertBefore(li,li_button);
+    }
+    function export_pol() {
+    var policy = "/*" + document.getElementById("descr").value + "*/\n";
+    policy += "policy = {\n";
+    policy += "mperms: " + document.getElementById("mperms").value + ",\n";
+    policy += "guard: [";
+    var ul = document.getElementById("button_pols");
+    var lis = ul.childNodes;
+    var j = 0;
+    var found_first = false;
+    var last;
+    while (!found_first) {
+      last = lis[j];
+      j++;
+      if (typeof last.tagName == "undefined") continue;
+      if (last.tagName.toLowerCase() !== "li") continue;
+      found_first = true;
+    }
+    for (; j<lis.length; j++) {
+			 this_li = lis[j];
+			 if (typeof this_li.tagName === "undefined") continue;
+			 if (this_li.tagName.toLowerCase() !== "li") continue;
+			 policy += '{';
+			 policy += "mperms: " + last.childNodes[2].value + ",\n";
+			 policy += 'match: "' + last.childNodes[4].value + '",\n';
+			 var crits = last.childNodes[5].childNodes;
+			 alert(crits);
+			 policy += 'cond: {'
+			 for (var i=0 ;i<crits.length-1;i++) {
+							    policy += crits[i].childNodes[1].value + ': "' + crits[i].childNodes[3].value + '",\n';
+							    }
+			 policy += '}';
+			 policy += '},\n';
+			 last = this_li;
+    }
+    policy += "],\n";
+    policy += "}";
+    alert(policy);
+    }
+  </script>
+  <h1> Create a policy </h1>
+  <h2> Description </h2>
+  <textarea id="descr" rows="4", cols="50">
+Policy for application
+Restricts the resource 
+  </textarea>
+  <h2> Policy </h2>
+  The application is allowed to use the APIs<br>
+  <textarea rows="4" cols="50">
+smsplugin.sendsms
+  </textarea><br>
+  only
+  <input id="mperms" type="number" value=0 />
+  time(s) to start with and
+  <ul id="button_pols">
+    <li>
+      <button id="b_addBut" onclick="add_buttonPol(event)">Add button policy</button>
+    </li>
+  </ul>
+  <button onclick="export_pol(event)">Create policy file</button>
+  <script type="text/javascript">
+    document.addEventListener("DOMContentLoaded",function() {
+    document.getElementById("b_addBut").dispatchEvent(new Event('click'));
+    document.getElementById("b_addCrit").dispatchEvent(new Event('click'));
+    });
+  </script>
+</body>
