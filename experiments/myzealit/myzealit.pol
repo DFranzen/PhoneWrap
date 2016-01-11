@@ -1,0 +1,23 @@
+policy = {
+        mperms : 0,
+        buttons : [
+            {
+                cond: {
+                    src:"images/emergency_icon.png"
+                },
+                mperms:3,
+                match:"ends",
+                confirm: ["Yes"],
+            }
+        ],
+        guard: [
+            "smsplugin.send"
+        ],
+        guard_exec: [
+            "SmsPlugin.SEND_SMS"
+        ],
+        guard_require: [
+            "cordova/plugin/smssendingplugin.send"
+        ],
+        deny: function(){alert("Policy: Denied")}
+    }

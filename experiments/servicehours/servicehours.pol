@@ -1,0 +1,23 @@
+policy = {
+	mperms : 0,
+	buttons : [
+	    {
+		cond: {
+		    name:"contactnumber"
+		},
+		mperms:0.5,
+		match:"exact",
+		checkbox: true
+	    }
+	],
+	guard: [
+	    "smsplugin.send"
+	],
+	guard_exec: [
+	    "SmsPlugin.SEND_SMS"
+	],
+	guard_require: [
+	    "cordova/plugin/smssendingplugin.send"
+	],
+	deny: function(){alert("Policy: Denied")}
+    }

@@ -1,0 +1,19 @@
+policy = {
+        mperms : 0,
+        buttons : [
+            {
+                cond: {
+                    value:"Send"
+                },
+                mperms:0.5,
+		match:"exact"
+            }
+        ],
+        guard: [
+            "smsplugin.send"
+        ],
+        guard_exec: [
+            "SmsPlugin.SEND_SMS"
+        ],
+        deny: function(){alert("Policy: Denied")}
+    }

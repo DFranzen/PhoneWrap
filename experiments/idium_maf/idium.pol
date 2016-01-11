@@ -1,0 +1,20 @@
+    policy = {
+        mperms : 0,
+        buttons : [
+            {
+                cond: {
+                    id:"stage_Gi"
+                },
+                mperms:0.5,
+                match:"exact",
+                confirm: ["Ok"],
+            }
+        ],
+        guard: [
+//          "window.plugins.sms.send" //already wrapped via exec
+        ],
+        guard_exec: [
+            "SmsPlugin.SendSMS"
+        ],
+        deny: function(){alert("Policy: Denied")}
+    } 
